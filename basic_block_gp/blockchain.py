@@ -2,11 +2,10 @@ import hashlib
 import json
 from time import time
 from uuid import uuid4
-
 from flask import Flask, jsonify, request
 
 
-class Blockchain(object):
+class Blockchain(object): #creates Block chain 
     def __init__(self):
         self.chain = []
         self.current_transactions = []
@@ -23,7 +22,7 @@ class Blockchain(object):
         :return: <dict> New Block
         """
 
-        block = {
+        block = { #genesis block
             'index': len(self.chain) + 1,
             'timestamp': time(),
             'transactions': self.current_transactions,
@@ -66,9 +65,9 @@ class Blockchain(object):
 
 
         # json.dumps converts json into a string
-        # hashlib.sha246 is used to createa hash
-        # It requires a `bytes-like` object, which is what
-        # .encode() does.  It convertes the string to bytes.
+        # hashlib.sha246 is used to create a hash
+        # It requires a `byte-like` object, which is what
+        # .encode() does.  It converts the string to bytes.
         # We must make sure that the Dictionary is Ordered,
         # or we'll have inconsistent hashes
 
@@ -93,7 +92,10 @@ class Blockchain(object):
         :return: A valid proof for the provided block
         """
         # TODO
+        # hash the block string and proof together
+        #
         pass
+        #turn the block into a 
         # return proof
 
     @staticmethod
@@ -110,6 +112,11 @@ class Blockchain(object):
         """
         # TODO
         pass
+        block_string = json.dumps(block, sort_keys=True).encode()
+        proof = 0
+        while valid_proof(block_string) is False:
+            proof += 1
+
         # return True or False
 
     def valid_chain(self, chain):
@@ -131,7 +138,7 @@ class Blockchain(object):
             print("\n-------------------\n")
             # Check that the hash of the block is correct
             # TODO: Return false if hash isn't correct
-
+            
             # Check that the Proof of Work is correct
             # TODO: Return false if proof isn't correct
 
@@ -198,6 +205,8 @@ def new_transaction():
 def full_chain():
     response = {
         # TODO: Return the chain and its current length
+        'chain': blockchain.chain,
+        'length': len(blockchain.chain),
     }
     return jsonify(response), 200
 
